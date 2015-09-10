@@ -10,10 +10,7 @@ var datepicker = (function(){
       name_field      : '{{ name }}'
     };
 
-        MONTHS = [{
-        name:'----',
-        value:'0'
-        } ,{
+    var MONTHS = [{
         name: 'Enero',
         value: '1'
         },{
@@ -52,7 +49,6 @@ var datepicker = (function(){
         }];
 
     var dom = {}
-
     var catchDom = function() {
       dom.day = $(st.day);
       dom.month = $(st.month);
@@ -67,12 +63,13 @@ var datepicker = (function(){
     var events = {
       changeMonth : function () {
         var selectedYear,
-            selectedMonth;
+            selectedMonth,
+            selectedDay;
 
         selectedYear = fn.getYear(),
         selectedMonth = fn.getMonth(),
+        selected_day = fn.getDay();
 
-        fn.fillDays(selectedMonth, selectedYear);
       },
       changeYear : function () {
           var selectedYear,
@@ -97,10 +94,7 @@ var datepicker = (function(){
 
         fn.fillYears();
         fn.fillMonths();
-        fn.setYear(currentYear);
-        fn.setMonth(currentMonth);
-        fn.fillDays(currentMonth, currentYear);
-        fn.setDay(currentDay);
+        fn.fillDays();
         callback();
       },
       setDate: function (date) {
@@ -133,10 +127,6 @@ var datepicker = (function(){
         return dom.month.val();
       },
       setDay : function (day) {
-        if (typeof day === 'number') {
-          day = fn.formatedValue(day)
-        }
-
         dom.day.val(day)
       },
       getDay : function () {
@@ -147,9 +137,11 @@ var datepicker = (function(){
             item = 1,
             day = "",
             dayOptionHTML = "",
-            daysListOptionsHTML = "";
+            daysListOptionsHTML = "<option value=\"0\">----</option>";
+            last_selected_day = "";
 
-        available_days = fn.getDaysInMonth(month, year);
+        last_selected_day = fn.getDay();
+        available_days = 31;
 
         for (item; item <= available_days; item++) {
           var day = item;
@@ -158,10 +150,11 @@ var datepicker = (function(){
           daysListOptionsHTML =  daysListOptionsHTML + dayOptionHTML;
         }
         dom.day.html(daysListOptionsHTML);
+        fn.setDay(last_selected_day);
       },
       fillMonths : function () {
         var item = null,
-            monthsListOptionsHTML = "",
+            monthsListOptionsHTML = "<option value=\"0\">-----</option>";
             monthOptionHTML = "";
 
         for (item in MONTHS) {
@@ -189,6 +182,7 @@ var datepicker = (function(){
           yearOptionHTML = fn.renderTemplate(year, year);
           yearsListOptionsHTML = yearOptionHTML + yearsListOptionsHTML;
         }
+        yearsListOptionsHTML =  "<option value=\"0\">----</option>" + yearsListOptionsHTML;
         dom.year.html(yearsListOptionsHTML);
       },
       getAllAvailableYears : function () {
