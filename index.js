@@ -87,11 +87,7 @@ var datepicker = (function(){
         dom.month.on('change', events.changeMonth);
         dom.year.on('change', events.changeYear);
       },
-      prepareDatePicker: function (callback) {
-        var currentYear = fn.getCurrentYear(),
-            currentMonth = fn.getCurrentMonth(),
-            currentDay = fn.getCurrentDay();
-
+      prepareDatePicker: function (callback) {        
         fn.fillYears();
         fn.fillMonths();
         fn.fillDays();
@@ -189,7 +185,7 @@ var datepicker = (function(){
          var years = [],
              i = 0,
              min_years = 1910,
-             max_years = fn.getCurrentYear();
+             max_years = fn.getMaxYear();
 
           for (i = min_years; i <= max_years; i ++ ) {
             years.push(i);
@@ -197,20 +193,9 @@ var datepicker = (function(){
 
         return years;
       },
-      getCurrentYear : function () {
+      getMaxYear : function () {
           var currentYear = new Date().getFullYear();
           return currentYear;
-      },
-      getCurrentMonth : function () {
-          var currentMonth = new Date().getMonth() + 1;
-
-          return currentMonth;
-      },
-
-     getCurrentDay : function () {
-          var currentDay = new Date().getDate();
-
-          return fn.getFormatedValue(currentDay);
       },
       getFormatedValue : function (value) {
         var formatedValue = "";
